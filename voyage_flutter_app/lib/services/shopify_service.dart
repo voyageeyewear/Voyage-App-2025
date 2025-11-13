@@ -10,8 +10,21 @@ class ShopifyService {
   Future<List<Product>> getProducts({int limit = 20}) async {
     try {
       final response = await _apiService.get('/api/shopify/products?limit=$limit');
+      if (response == null || response['products'] == null) {
+        return [];
+      }
       final products = (response['products'] as List)
-          .map((json) => Product.fromJson(json))
+          .map((json) {
+            try {
+              return Product.fromJson(json as Map<String, dynamic>);
+            } catch (e) {
+              print('Error parsing product: $e');
+              print('Product JSON: $json');
+              return null;
+            }
+          })
+          .where((product) => product != null)
+          .cast<Product>()
           .toList();
       return products;
     } catch (e) {
@@ -47,8 +60,21 @@ class ShopifyService {
   Future<List<Collection>> getCollections() async {
     try {
       final response = await _apiService.get('/api/shopify/collections');
+      if (response == null || response['collections'] == null) {
+        return [];
+      }
       final collections = (response['collections'] as List)
-          .map((json) => Collection.fromJson(json))
+          .map((json) {
+            try {
+              return Collection.fromJson(json as Map<String, dynamic>);
+            } catch (e) {
+              print('Error parsing collection: $e');
+              print('Collection JSON: $json');
+              return null;
+            }
+          })
+          .where((collection) => collection != null)
+          .cast<Collection>()
           .toList();
       return collections;
     } catch (e) {

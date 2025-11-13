@@ -16,12 +16,20 @@ class Collection {
   });
 
   factory Collection.fromJson(Map<String, dynamic> json) {
+    // Safely parse imageUrl
+    String? parseImageUrl(dynamic image) {
+      if (image == null) return null;
+      if (image is String) return image;
+      if (image is Map) return image['url']?.toString();
+      return null;
+    }
+
     return Collection(
-      id: json['id'] ?? '',
-      title: json['title'] ?? '',
-      handle: json['handle'] ?? '',
-      description: json['description'],
-      imageUrl: json['image']?['url'] ?? json['image'],
+      id: json['id']?.toString() ?? '',
+      title: json['title']?.toString() ?? '',
+      handle: json['handle']?.toString() ?? '',
+      description: json['description']?.toString(),
+      imageUrl: parseImageUrl(json['image']),
       productsCount: json['productsCount'] ?? 0,
     );
   }

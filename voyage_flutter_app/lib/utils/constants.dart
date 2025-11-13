@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppConstants {
   // API Configuration
   static const String apiBaseUrl = 'http://192.168.1.102:3000';  // Your computer's IP address
-  static const String storeDomain = 'voyage-eyewear.myshopify.com';
+  static const String storeDomain = 'tageye.myshopify.com';
   
   // App Information
   static const String appName = 'Voyage Eyewear';

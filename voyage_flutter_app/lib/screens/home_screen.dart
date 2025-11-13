@@ -3,6 +3,14 @@ import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/product_card.dart';
+import '../widgets/announcement_bar.dart';
+import '../widgets/navigation_drawer.dart';
+import '../widgets/search_drawer.dart';
+import '../widgets/hero_carousel.dart';
+import '../widgets/shop_by_shape_carousel.dart';
+import '../widgets/quick_picks_section.dart';
+import '../config/announcement_config.dart';
+import '../config/shop_by_shape_config.dart';
 import '../utils/navigation_helper.dart';
 import '../utils/constants.dart';
 
@@ -42,59 +50,118 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppConstants.appName,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () => NavigationHelper.navigateToSearch(context),
-          ),
-          Consumer<CartProvider>(
-            builder: (context, cart, child) {
-              return Stack(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.shopping_cart_outlined),
-                    onPressed: () => NavigationHelper.navigateToCart(context),
-                  ),
-                  if (cart.itemCount > 0)
-                    Positioned(
-                      right: 8,
-                      top: 8,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: AppConstants.secondaryColor,
-                          shape: BoxShape.circle,
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 18,
-                          minHeight: 18,
-                        ),
-                        child: Text(
-                          '${cart.itemCount}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+    return SafeArea(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight + 38.0),
+          child: Column(
+            children: [
+              // Announcement Bar at the top
+              if (AnnouncementConfig.enabled)
+                AnnouncementBar(
+                  messages: AnnouncementConfig.messages,
+                  backgroundColor: AppConstants.primaryColor,
+                  textColor: Colors.white,
+                  height: AnnouncementConfig.barHeight,
+                  scrollSpeed: AnnouncementConfig.scrollSpeed,
+                ),
+              
+              // App Header below announcement
+              AppBar(
+                leading: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.menu, size: 24),
+                      onPressed: () {
+                        NavigationDrawerWidget.show(context);
+                      },
+                      padding: EdgeInsets.zero,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.search, size: 24),
+                      onPressed: () => SearchDrawerWidget.show(context),
+                      padding: EdgeInsets.zero,
+                    ),
+                  ],
+                ),
+                leadingWidth: 100,
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'voyage',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
                       ),
                     ),
+                    const SizedBox(width: 4),
+                    const Text(
+                      '|',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'वॉयेज',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                centerTitle: true,
+                actions: [
+                  Consumer<CartProvider>(
+                    builder: (context, cart, child) {
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.shopping_bag_outlined, size: 24),
+                            onPressed: () => NavigationHelper.navigateToCart(context),
+                            padding: EdgeInsets.zero,
+                          ),
+                          if (cart.itemCount > 0)
+                            Positioned(
+                              right: 8,
+                              top: 8,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: AppConstants.secondaryColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 16,
+                                  minHeight: 16,
+                                ),
+                                child: Text(
+                                  '${cart.itemCount}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 12),
                 ],
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-        ],
+              ),
+          ],
+        ),
       ),
       body: Consumer<ProductProvider>(
         builder: (context, productProvider, child) {
@@ -129,51 +196,48 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          return RefreshIndicator(
-            onRefresh: _refreshData,
-            child: CustomScrollView(
-              slivers: [
-                // Hero Banner
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 200,
-                    margin: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          AppConstants.primaryColor,
-                          AppConstants.accentColor,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Welcome to ${AppConstants.appName}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                  return RefreshIndicator(
+                    onRefresh: _refreshData,
+                    child: CustomScrollView(
+                      slivers: [
+                        // Hero Carousel (800x1067)
+                        SliverToBoxAdapter(
+                          child: HeroCarousel(
+                            items: const [
+                              CarouselItem(
+                                imageUrl: 'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
+                              ),
+                              CarouselItem(
+                                imageUrl: 'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
+                              ),
+                              CarouselItem(
+                                imageUrl: 'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Shop By Shape Section
+                        if (ShopByShapeConfig.enabled)
+                          SliverToBoxAdapter(
+                            child: ShopByShapeCarousel(
+                              items: ShopByShapeConfig.shapes,
+                              title: ShopByShapeConfig.sectionTitle,
+                              itemWidth: ShopByShapeConfig.itemWidth,
+                              itemHeight: ShopByShapeConfig.itemHeight,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Premium Eyewear Collection',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
+
+                        // Quick Picks Section
+                        SliverToBoxAdapter(
+                          child: QuickPicksSection(
+                            products: productProvider.products.take(10).toList(),
+                            title: 'Quick Picks',
+                            onViewAll: () {
+                              // Navigate to all products
+                            },
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                        ),
 
                 // Collections Section
                 if (productProvider.collections.isNotEmpty) ...[
@@ -282,6 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
+      ),
       ),
     );
   }
