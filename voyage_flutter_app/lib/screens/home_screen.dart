@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../providers/cart_provider.dart';
-import '../widgets/product_card.dart';
 import '../widgets/announcement_bar.dart';
 import '../widgets/navigation_drawer.dart';
 import '../widgets/search_drawer.dart';
 import '../widgets/hero_carousel.dart';
 import '../widgets/shop_by_shape_carousel.dart';
 import '../widgets/quick_picks_section.dart';
+import '../widgets/celebrity_spotted_section.dart';
+import '../widgets/fade_carousel.dart';
+import '../widgets/new_launched_section.dart';
 import '../config/announcement_config.dart';
 import '../config/shop_by_shape_config.dart';
+import '../config/celebrity_config.dart';
+import '../config/fade_carousel_config.dart';
 import '../utils/navigation_helper.dart';
 import '../utils/constants.dart';
 
@@ -239,109 +243,46 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
 
-                // Collections Section
-                if (productProvider.collections.isNotEmpty) ...[
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        'Shop by Category',
-                        style: Theme.of(context).textTheme.displayMedium,
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 120,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: productProvider.collections.length,
-                        itemBuilder: (context, index) {
-                          final collection = productProvider.collections[index];
-                          return GestureDetector(
-                            onTap: () {
-                              NavigationHelper.navigateToCollection(
-                                context,
-                                collection.handle,
-                              );
-                            },
-                            child: Container(
-                              width: 100,
-                              margin: const EdgeInsets.only(right: 16),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      color: AppConstants.primaryColor.withOpacity(0.1),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.category,
-                                      size: 40,
-                                      color: AppConstants.primaryColor,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    collection.title,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ],
+                        // Celebrity Spotted Section
+                        if (CelebrityConfig.enabled)
+                          SliverToBoxAdapter(
+                            child: CelebritySpottedSection(
+                              celebrities: CelebrityConfig.celebrities,
+                              title: CelebrityConfig.sectionTitle,
+                              imageSize: CelebrityConfig.imageSize,
+                            ),
+                          ),
+
+                        // Fade Carousel Section (1400×500)
+                        if (FadeCarouselConfig.enabled)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                              child: FadeCarousel(
+                                items: FadeCarouselConfig.items,
+                                width: FadeCarouselConfig.width,
+                                height: FadeCarouselConfig.height,
+                                duration: FadeCarouselConfig.duration,
+                                fadeDuration: FadeCarouselConfig.fadeDuration,
                               ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+                          ),
 
-                // Products Section
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      'Featured Products',
-                      style: Theme.of(context).textTheme.displayMedium,
-                    ),
-                  ),
-                ),
+                        // New Launched Section
+                        SliverToBoxAdapter(
+                          child: NewLaunchedSection(
+                            products: productProvider.products.take(10).toList(),
+                            title: 'New Launched',
+                            onViewAll: () {
+                              // Navigate to all products
+                            },
+                          ),
+                        ),
 
-                if (productProvider.products.isEmpty)
-                  const SliverFillRemaining(
-                    child: Center(
-                      child: Text('No products available'),
-                    ),
-                  )
-                else
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverGrid(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.7,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final product = productProvider.products[index];
-                          return ProductCard(product: product);
-                        },
-                        childCount: productProvider.products.length,
-                      ),
-                    ),
-                  ),
-
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 32),
-                ),
+                        // Add spacing at bottom
+                        const SliverToBoxAdapter(
+                          child: SizedBox(height: 32),
+                        ),
               ],
             ),
           );
