@@ -52,6 +52,7 @@ router.get('/products', async (req, res) => {
     
     // Try Shopify first, fallback to demo products if it fails
     let products;
+    let isDemo = false;
     try {
       products = await shopifyService.getProducts(limit);
     } catch (shopifyError) {
@@ -61,9 +62,11 @@ router.get('/products', async (req, res) => {
       const path = require('path');
       const demoPath = path.join(__dirname, 'demo_products.json');
       products = JSON.parse(fs.readFileSync(demoPath, 'utf8'));
+      isDemo = true;
     }
     
-    const transformedProducts = products.map(transformProduct);
+    // Only transform if from Shopify API (demo products are already in correct format)
+    const transformedProducts = isDemo ? products : products.map(transformProduct);
     
     res.json({
       success: true,
@@ -113,9 +116,11 @@ router.get('/collections', async (req, res) => {
       collections: transformedCollections,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
+    console.log('Collections failed, returning empty array');
+    // Return empty array instead of error
+    res.json({
+      success: true,
+      collections: [],
     });
   }
 });
@@ -153,18 +158,37 @@ router.get('/products/collection/:handle', async (req, res) => {
 router.get('/search', async (req, res) => {
   try {
     const query = req.query.q || '';
-    const products = await shopifyService.searchProducts(query);
     
-    const transformedProducts = products.map(transformProduct);
+    // Try Shopify search first, fallback to filtering demo products
+    let results;
+    try {
+      results = await shopifyService.searchProducts(query);
+      results = results.map(transformProduct);
+    } catch (shopifyError) {
+      console.log('Search failed, filtering demo products');
+      // Fallback: Load and filter demo products
+      const fs = require('fs');
+      const path = require('path');
+      const demoPath = path.join(__dirname, 'demo_products.json');
+      const demoProducts = JSON.parse(fs.readFileSync(demoPath, 'utf8'));
+      
+      // Simple filter by title
+      const searchLower = query.toLowerCase();
+      results = demoProducts.filter(p => 
+        p.title.toLowerCase().includes(searchLower) ||
+        p.description.toLowerCase().includes(searchLower)
+      );
+    }
     
     res.json({
       success: true,
-      results: transformedProducts,
+      results: results,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
+    // Last resort: return empty results
+    res.json({
+      success: true,
+      results: [],
     });
   }
 });
