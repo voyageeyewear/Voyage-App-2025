@@ -127,7 +127,7 @@ class NewLaunchedSection extends StatelessWidget {
                     child: product.images.isNotEmpty
                         ? CachedNetworkImage(
                             imageUrl: product.images.first,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                             width: double.infinity,
                             placeholder: (context, url) => Container(
                               color: const Color(0xFF2D2D2D),
