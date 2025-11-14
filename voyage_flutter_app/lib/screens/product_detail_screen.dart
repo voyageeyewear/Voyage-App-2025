@@ -25,6 +25,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final PageController _imageController = PageController();
   int _currentImageIndex = 0;
+  int _quantity = 1;
   bool _isLoading = true;
   Product? _product;
 
@@ -66,11 +67,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final cartProvider = context.read<CartProvider>();
     
     try {
-      cartProvider.addItem(_product!);
+      cartProvider.addItem(_product!, quantity: _quantity);
 
       NavigationHelper.showSnackBar(
         context,
-        '✓ Added to cart',
+        '✓ Added $_quantity ${_quantity > 1 ? "items" : "item"} to cart',
         isError: false,
       );
     } catch (e) {
@@ -85,6 +86,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void _buyNow() {
     _addToCart();
     NavigationHelper.navigateToCart(context);
+  }
+
+  void _incrementQuantity() {
+    setState(() {
+      _quantity++;
+    });
+  }
+
+  void _decrementQuantity() {
+    if (_quantity > 1) {
+      setState(() {
+        _quantity--;
+      });
+    }
   }
 
   double get _currentPrice => _product?.minPrice ?? 0;
@@ -276,27 +291,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                         const SizedBox(height: 24),
 
-                        // Description
-                        if (_product!.description.isNotEmpty) ...[
-                          const Text(
-                            'Description',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            HtmlHelper.parseHtml(_product!.description),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[700],
-                              height: 1.5,
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                        ],
+                        // Quantity Selector
+                        _buildQuantitySelector(),
+
+                        const SizedBox(height: 16),
+
+                        const Divider(height: 32, thickness: 1),
+
+                        // Collapsible Description
+                        _buildCollapsibleSection(
+                          title: 'Description',
+                          content: _product!.description.isNotEmpty
+                              ? HtmlHelper.parseHtml(_product!.description)
+                              : 'No description available.',
+                        ),
+
+                        const Divider(height: 1, thickness: 1),
+
+                        // Collapsible Return Policy
+                        _buildCollapsibleSection(
+                          title: 'Return policy',
+                          content: 'Easy returns within 7 days of delivery. Product must be unused and in original packaging.',
+                        ),
+
+                        const SizedBox(height: 24),
 
                         // Tags
                         if (_product!.tags.isNotEmpty) ...[
@@ -610,6 +628,95 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
           ),
+      ],
+    );
+  }
+
+  Widget _buildQuantitySelector() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Quantity:',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey[300]!),
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: _decrementQuantity,
+                icon: const Icon(Icons.remove, size: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  '$_quantity',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: _incrementQuantity,
+                icon: const Icon(Icons.add, size: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCollapsibleSection({
+    required String title,
+    required String content,
+  }) {
+    return ExpansionTile(
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
+        ),
+      ),
+      trailing: Container(
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          Icons.keyboard_arrow_down,
+          color: Colors.black,
+          size: 20,
+        ),
+      ),
+      tilePadding: EdgeInsets.zero,
+      childrenPadding: const EdgeInsets.only(bottom: 16, top: 8),
+      children: [
+        Text(
+          content,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey[700],
+            height: 1.6,
+          ),
+        ),
       ],
     );
   }
