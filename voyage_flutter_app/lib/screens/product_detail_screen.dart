@@ -458,7 +458,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Text(
                                 'Rs. ${_currentPrice.toStringAsFixed(2)}',
                                 style: const TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
