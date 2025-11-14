@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppConstants {
   // API Configuration
   static const String apiBaseUrl = 'https://voyage-app-2025-production.up.railway.app';  // Railway deployment (works everywhere!)
-  static const String storeDomain = 'voyage-eyewear.myshopify.com';
+  static const String storeDomain = 'tageye.myshopify.com';
   
   // App Information
   static const String appName = 'Voyage Eyewear';
