@@ -382,9 +382,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ),
 
-          // Bottom Section - Price Summary + Buttons
+          // Bottom Section - Sticky Cart
           Container(
-            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -398,104 +397,162 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             child: SafeArea(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Price Summary
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Rs. ${_currentPrice.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
+                  // Promotional Banner
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFDDB6B6), // Light brown/salmon
+                    ),
+                    child: Center(
+                      child: RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF4A4A4A),
+                            fontWeight: FontWeight.w500,
                           ),
-                          if (_compareAtPrice != null)
-                            Text(
-                              'Rs. ${_compareAtPrice!.toStringAsFixed(2)}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[500],
-                                decoration: TextDecoration.lineThrough,
+                          children: [
+                            const TextSpan(
+                              text: 'Get at ',
+                            ),
+                            TextSpan(
+                              text: '₹${(_currentPrice - 150).toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
-                          Text(
-                            'Inclusive of all taxes',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
+                            const TextSpan(
+                              text: ' by using ',
                             ),
-                          ),
-                        ],
+                            const TextSpan(
+                              text: 'GRAB150',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
                   ),
 
-                  const SizedBox(height: 16),
-
-                  // Buttons Row
-                  Row(
-                    children: [
-                      // Add to Cart Button (Outlined)
-                      Expanded(
-                        child: SizedBox(
-                          height: 50,
-                          child: OutlinedButton(
-                            onPressed: _addToCart,
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.black,
-                              side: const BorderSide(
-                                color: Colors.black,
-                                width: 1.5,
+                  // Price and Buttons Row
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        // Left Side - Price Info
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Rs. ${_currentPrice.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                              if (_compareAtPrice != null)
+                                Text(
+                                  'Rs. ${_compareAtPrice!.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[500],
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                                ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'Inclusive of all taxes',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.grey[600],
+                                ),
                               ),
-                              backgroundColor: Colors.white,
-                            ),
-                            child: const Text(
-                              'Add to Cart',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            ],
                           ),
                         ),
-                      ),
 
-                      const SizedBox(width: 12),
+                        const SizedBox(width: 12),
 
-                      // Buy Now Button (Filled Black)
-                      Expanded(
-                        child: SizedBox(
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: _buyNow,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                        // Right Side - Buttons
+                        Expanded(
+                          flex: 3,
+                          child: Row(
+                            children: [
+                              // Add to Cart Button
+                              Expanded(
+                                child: SizedBox(
+                                  height: 48,
+                                  child: OutlinedButton(
+                                    onPressed: _addToCart,
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: Colors.black,
+                                      side: const BorderSide(
+                                        color: Colors.black,
+                                        width: 1.5,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    ),
+                                    child: const Text(
+                                      'Add to Cart',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              elevation: 0,
-                            ),
-                            child: const Text(
-                              'Buy Now',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+
+                              const SizedBox(width: 8),
+
+                              // Buy Now Button
+                              Expanded(
+                                child: SizedBox(
+                                  height: 48,
+                                  child: ElevatedButton(
+                                    onPressed: _buyNow,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      elevation: 0,
+                                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    ),
+                                    child: const Text(
+                                      'Buy Now',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
