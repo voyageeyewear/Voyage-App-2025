@@ -38,12 +38,13 @@ class _ServiceBenefitsSliderState extends State<ServiceBenefitsSlider> {
   Widget build(BuildContext context) {
     if (widget.benefits.isEmpty) return const SizedBox.shrink();
 
-    return Padding(
+    return Container(
+      color: const Color(0xFFF5F5F5),
       padding: const EdgeInsets.symmetric(vertical: 32),
       child: Column(
         children: [
           SizedBox(
-            height: 260,
+            height: 280,
             child: PageView.builder(
               controller: _controller,
               itemCount: widget.benefits.length,
@@ -51,11 +52,17 @@ class _ServiceBenefitsSliderState extends State<ServiceBenefitsSlider> {
                 final benefit = widget.benefits[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Card(
-                    elevation: 0,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(28),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          blurRadius: 16,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -66,19 +73,19 @@ class _ServiceBenefitsSliderState extends State<ServiceBenefitsSlider> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: 72,
-                            height: 72,
+                            width: 70,
+                            height: 70,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.black, width: 2),
                             ),
                             child: Icon(
                               benefit.icon,
-                              size: 32,
+                              size: 30,
                               color: Colors.black,
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 18),
                           Text(
                             benefit.title,
                             style: const TextStyle(
@@ -94,7 +101,7 @@ class _ServiceBenefitsSliderState extends State<ServiceBenefitsSlider> {
                             style: const TextStyle(
                               fontSize: 15,
                               color: Colors.black87,
-                              height: 1.4,
+                              height: 1.5,
                             ),
                           ),
                         ],
@@ -112,8 +119,8 @@ class _ServiceBenefitsSliderState extends State<ServiceBenefitsSlider> {
             effect: const ExpandingDotsEffect(
               dotHeight: 8,
               dotWidth: 8,
-              activeDotColor: Colors.black,
-              dotColor: Colors.black26,
+              activeDotColor: Color(0xFF0057FF),
+              dotColor: Color(0xFFBFC3C8),
               spacing: 6,
             ),
           ),
