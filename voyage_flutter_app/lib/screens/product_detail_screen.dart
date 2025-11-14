@@ -395,12 +395,51 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                   ),
 
-                  // Price and Buttons Row (Mirrored Layout)
+                  // Price and Buttons Row
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        // Left Side - Buttons
+                        // Left Side - Price Info
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Rs. ${_currentPrice.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              if (_compareAtPrice != null)
+                                Text(
+                                  'Rs. ${_compareAtPrice!.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[500],
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                                ),
+                              const SizedBox(height: 1),
+                              Text(
+                                'Inclusive of all taxes',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(width: 12),
+
+                        // Right Side - Buttons
                         Expanded(
                           flex: 3,
                           child: Row(
@@ -459,45 +498,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(width: 12),
-
-                        // Right Side - Price Info
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'Rs. ${_currentPrice.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              if (_compareAtPrice != null)
-                                Text(
-                                  'Rs. ${_compareAtPrice!.toStringAsFixed(2)}',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey[500],
-                                    decoration: TextDecoration.lineThrough,
-                                  ),
-                                ),
-                              const SizedBox(height: 1),
-                              Text(
-                                'Inclusive of all taxes',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.grey[600],
                                 ),
                               ),
                             ],
