@@ -274,54 +274,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                         ],
 
-                        const SizedBox(height: 16),
-
-                        // Promotional Banner (pink/salmon color)
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFD4D4), // Light pink/salmon
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[900],
-                                height: 1.3,
-                              ),
-                              children: [
-                                const TextSpan(
-                                  text: 'Get at ',
-                                  style: TextStyle(fontWeight: FontWeight.w400),
-                                ),
-                                TextSpan(
-                                  text: '₹${(_currentPrice - 150).toStringAsFixed(0)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const TextSpan(
-                                  text: ' by using ',
-                                  style: TextStyle(fontWeight: FontWeight.w400),
-                                ),
-                                const TextSpan(
-                                  text: 'GRAB150',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
                         const SizedBox(height: 24),
 
                         // Description
