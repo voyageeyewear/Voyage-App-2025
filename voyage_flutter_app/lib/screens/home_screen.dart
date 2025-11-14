@@ -16,7 +16,7 @@ import '../widgets/best_selling_section.dart';
 import '../widgets/before_after_section.dart';
 import '../widgets/featured_product_section.dart';
 import '../widgets/faq_section.dart';
-import '../widgets/features_carousel.dart';
+import '../widgets/service_benefits_slider.dart';
 import '../widgets/footer_section.dart';
 import '../config/announcement_config.dart';
 import '../config/shop_by_shape_config.dart';
@@ -25,7 +25,7 @@ import '../config/fade_carousel_config.dart';
 import '../config/featured_config.dart';
 import '../config/before_after_config.dart';
 import '../config/faq_config.dart';
-import '../config/features_config.dart';
+import '../config/service_benefits_config.dart';
 import '../utils/navigation_helper.dart';
 import '../utils/constants.dart';
 
@@ -346,12 +346,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
 
-                        // Features Carousel Section
-                        if (FeaturesConfig.enabled)
+                        // Service Benefits Slider
+                        if (ServiceBenefitsConfig.enabled)
                           const SliverToBoxAdapter(
-                            child: FeaturesCarousel(
-                              features: FeaturesConfig.features,
-                              autoPlayDuration: FeaturesConfig.autoPlayDuration,
+                            child: ServiceBenefitsSlider(
+                              benefits: ServiceBenefitsConfig.benefits,
                             ),
                           ),
 
