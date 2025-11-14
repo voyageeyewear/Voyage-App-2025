@@ -87,14 +87,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.menu, size: 24),
+                      icon: const Icon(Icons.menu, size: 24, color: Colors.black),
                       onPressed: () {
                         NavigationDrawerWidget.show(context);
                       },
                       padding: EdgeInsets.zero,
                     ),
                     IconButton(
-                      icon: const Icon(Icons.search, size: 24),
+                      icon: const Icon(Icons.search, size: 24, color: Colors.black),
                       onPressed: () => SearchDrawerWidget.show(context),
                       padding: EdgeInsets.zero,
                     ),
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 leadingWidth: 100,
                 title: Image.network(
                   'https://www.voyageeyewear.com/cdn/shop/files/Voyage_hindi_2.png?v=1720597430&width=350',
-                  height: 32,
+                  height: 26,
                   fit: BoxFit.contain,
                 ),
                 centerTitle: true,
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         alignment: Alignment.center,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.shopping_bag_outlined, size: 24),
+                            icon: const Icon(Icons.shopping_bag_outlined, size: 24, color: Colors.black),
                             onPressed: () => NavigationHelper.navigateToCart(context),
                             padding: EdgeInsets.zero,
                           ),
