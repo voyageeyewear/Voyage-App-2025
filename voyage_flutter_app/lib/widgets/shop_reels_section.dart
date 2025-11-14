@@ -46,7 +46,7 @@ class ShopReelsSection extends StatelessWidget {
 
         // Video Carousel
         SizedBox(
-          height: 500,
+          height: 300, // Reduced height (40% smaller)
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -56,7 +56,7 @@ class ShopReelsSection extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 16),
                 child: ReelVideoCard(
                   videoUrl: videoUrls[index],
-                  width: 280,
+                  width: 210,
                 ),
               );
             },
@@ -137,40 +137,13 @@ class _ReelVideoCardState extends State<ReelVideoCard> {
       child: _hasError
           ? _buildErrorPlaceholder()
           : _isInitialized
-              ? Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    FittedBox(
-                      fit: BoxFit.cover,
-                      child: SizedBox(
-                        width: _videoController.value.size.width,
-                        height: _videoController.value.size.height,
-                        child: VideoPlayer(_videoController),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 12,
-                      left: 12,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.35),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text(
-                          'Auto-play',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+              ? FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: _videoController.value.size.width,
+                    height: _videoController.value.size.height,
+                    child: VideoPlayer(_videoController),
+                  ),
                 )
               : _buildLoadingPlaceholder(),
     );
