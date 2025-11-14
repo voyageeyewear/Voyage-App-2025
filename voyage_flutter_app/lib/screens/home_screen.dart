@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   padding: EdgeInsets.zero,
                 ),
-                leadingWidth: 100,
+                leadingWidth: 56,
                 title: Image.network(
                   'https://www.voyageeyewear.com/cdn/shop/files/Voyage_hindi_2.png?v=1720597430&width=350',
                   height: 26,
