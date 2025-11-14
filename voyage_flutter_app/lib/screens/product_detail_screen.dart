@@ -460,12 +460,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         borderRadius: BorderRadius.circular(24),
                                       ),
                                       backgroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                                      padding: const EdgeInsets.symmetric(horizontal: 8),
                                     ),
                                     child: const Text(
                                       'Add to Cart',
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -488,12 +488,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         borderRadius: BorderRadius.circular(24),
                                       ),
                                       elevation: 0,
-                                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                                      padding: const EdgeInsets.symmetric(horizontal: 8),
                                     ),
                                     child: const Text(
                                       'Buy Now',
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
