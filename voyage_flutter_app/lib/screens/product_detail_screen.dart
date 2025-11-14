@@ -309,54 +309,53 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                         const SizedBox(height: 16),
 
-                        // Price Section
+                        // Price + Compare + Savings Badge in one line
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               'Rs. ${_currentPrice.toStringAsFixed(2)}',
                               style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
                                 color: Colors.black,
                               ),
                             ),
                             if (_compareAtPrice != null) ...[
-                              const SizedBox(width: 12),
+                              const SizedBox(width: 8),
                               Text(
                                 'Rs. ${_compareAtPrice!.toStringAsFixed(2)}',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.grey[500],
                                   decoration: TextDecoration.lineThrough,
                                 ),
                               ),
                             ],
+                            if (_savings > 0) ...[
+                              const SizedBox(width: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF4267B2),
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: Text(
+                                  'Save Rs. ${_savings.toStringAsFixed(0)}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
-
-                        // Savings Badge
-                        if (_savings > 0) ...[
-                          const SizedBox(height: 12),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF4267B2), // Blue badge
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                            child: Text(
-                              'Save Rs. ${_savings.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
 
                         const SizedBox(height: 24),
 
