@@ -9,6 +9,10 @@ import '../utils/constants.dart';
 import '../utils/navigation_helper.dart';
 import '../utils/html_helper.dart';
 import '../widgets/product_image_viewer.dart';
+import '../widgets/announcement_bar.dart';
+import '../widgets/navigation_drawer.dart';
+import '../widgets/search_drawer.dart';
+import '../config/announcement_config.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String productId;
@@ -160,57 +164,120 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          Consumer<CartProvider>(
-            builder: (context, cart, child) {
-              return Stack(
-                alignment: Alignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.shopping_bag_outlined, color: Colors.black),
-                    onPressed: () => NavigationHelper.navigateToCart(context),
-                  ),
-                  if (cart.itemCount > 0)
-                    Positioned(
-                      right: 8,
-                      top: 8,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
-                        ),
-                        child: Text(
-                          '${cart.itemCount}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight + AnnouncementConfig.barHeight),
+          child: Column(
+            children: [
+              // Announcement Bar at the top
+              if (AnnouncementConfig.enabled)
+                AnnouncementBar(
+                  messages: AnnouncementConfig.messages,
+                  backgroundColor: AppConstants.primaryColor,
+                  textColor: Colors.white,
+                  height: AnnouncementConfig.barHeight,
+                  scrollSpeed: AnnouncementConfig.scrollSpeed,
+                ),
+              
+              // App Header below announcement
+              AppBar(
+                leading: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.menu, size: 24),
+                      onPressed: () {
+                        NavigationDrawerWidget.show(context);
+                      },
+                      padding: EdgeInsets.zero,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.search, size: 24),
+                      onPressed: () => SearchDrawerWidget.show(context),
+                      padding: EdgeInsets.zero,
+                    ),
+                  ],
+                ),
+                leadingWidth: 100,
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'voyage',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
                       ),
                     ),
+                    const SizedBox(width: 4),
+                    const Text(
+                      '|',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'वॉयेज',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                centerTitle: true,
+                actions: [
+                  Consumer<CartProvider>(
+                    builder: (context, cart, child) {
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.shopping_bag_outlined, size: 24),
+                            onPressed: () => NavigationHelper.navigateToCart(context),
+                            padding: EdgeInsets.zero,
+                          ),
+                          if (cart.itemCount > 0)
+                            Positioned(
+                              right: 8,
+                              top: 8,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: AppConstants.secondaryColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 16,
+                                  minHeight: 16,
+                                ),
+                                child: Text(
+                                  '${cart.itemCount}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 12),
                 ],
-              );
-            },
+              ),
+            ],
           ),
-          const SizedBox(width: 8),
-        ],
-      ),
+        ),
       body: Column(
         children: [
           Expanded(
@@ -530,6 +597,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 
