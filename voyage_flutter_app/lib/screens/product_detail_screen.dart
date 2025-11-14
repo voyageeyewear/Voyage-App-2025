@@ -188,14 +188,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               
               // App Header below announcement
               AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.menu, size: 24, color: Colors.black),
-                  onPressed: () {
-                    NavigationDrawerWidget.show(context);
-                  },
-                  padding: EdgeInsets.zero,
+                leading: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.menu, size: 24, color: Colors.black),
+                      onPressed: () {
+                        NavigationDrawerWidget.show(context);
+                      },
+                      padding: EdgeInsets.zero,
+                    ),
+                    const SizedBox(width: 72),
+                  ],
                 ),
-                leadingWidth: 56,
+                leadingWidth: 120,
                 title: Image.network(
                   'https://www.voyageeyewear.com/cdn/shop/files/Voyage_hindi_2.png?v=1720597430&width=350',
                   height: 26,
