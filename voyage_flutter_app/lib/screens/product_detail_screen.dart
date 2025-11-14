@@ -316,17 +316,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             Text(
                               'Rs. ${_currentPrice.toStringAsFixed(2)}',
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black,
                               ),
                             ),
                             if (_compareAtPrice != null) ...[
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 6),
                               Text(
                                 'Rs. ${_compareAtPrice!.toStringAsFixed(2)}',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.grey[500],
                                   decoration: TextDecoration.lineThrough,
@@ -334,21 +334,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                             ],
                             if (_savings > 0) ...[
-                              const SizedBox(width: 10),
+                              const SizedBox(width: 8),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 6,
+                                  horizontal: 10,
+                                  vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFF4267B2),
-                                  borderRadius: BorderRadius.circular(18),
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: Text(
                                   'Save Rs. ${_savings.toStringAsFixed(0)}',
                                   style: const TextStyle(
                                     color: Colors.white,
-                                    fontSize: 12,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
