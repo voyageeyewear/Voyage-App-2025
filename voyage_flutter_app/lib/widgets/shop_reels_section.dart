@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
 
 class ShopReelsSection extends StatelessWidget {
   final List<String> videoUrls;
@@ -86,7 +85,6 @@ class ReelVideoCard extends StatefulWidget {
 
 class _ReelVideoCardState extends State<ReelVideoCard> {
   late VideoPlayerController _videoController;
-  ChewieController? _chewieController;
   bool _isInitialized = false;
   bool _hasError = false;
 
@@ -103,45 +101,9 @@ class _ReelVideoCardState extends State<ReelVideoCard> {
       );
 
       await _videoController.initialize();
-
-      _chewieController = ChewieController(
-        videoPlayerController: _videoController,
-        autoPlay: false,
-        looping: true,
-        showControls: true,
-        aspectRatio: 9 / 16, // Vertical video (portrait)
-        placeholder: Container(
-          color: Colors.grey[300],
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-        errorBuilder: (context, errorMessage) {
-          return Container(
-            color: Colors.grey[300],
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.play_circle_outline,
-                    size: 64,
-                    color: Colors.grey[600],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Video unavailable',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
+      await _videoController.setLooping(true);
+      await _videoController.setVolume(0); // mute for reels
+      await _videoController.play();
 
       if (mounted) {
         setState(() {
@@ -160,7 +122,6 @@ class _ReelVideoCardState extends State<ReelVideoCard> {
   @override
   void dispose() {
     _videoController.dispose();
-    _chewieController?.dispose();
     super.dispose();
   }
 
@@ -175,8 +136,42 @@ class _ReelVideoCardState extends State<ReelVideoCard> {
       clipBehavior: Clip.antiAlias,
       child: _hasError
           ? _buildErrorPlaceholder()
-          : _isInitialized && _chewieController != null
-              ? Chewie(controller: _chewieController!)
+          : _isInitialized
+              ? Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        width: _videoController.value.size.width,
+                        height: _videoController.value.size.height,
+                        child: VideoPlayer(_videoController),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 12,
+                      left: 12,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.35),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          'Auto-play',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               : _buildLoadingPlaceholder(),
     );
   }

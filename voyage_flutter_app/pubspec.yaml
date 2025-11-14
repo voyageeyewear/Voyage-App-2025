@@ -22,7 +22,6 @@ dependencies:
   # Media & Caching
   cached_network_image: ^3.3.0
   video_player: ^2.8.1
-  chewie: ^1.7.5
   
   # Local Storage
   shared_preferences: ^2.2.2
