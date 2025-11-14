@@ -7,6 +7,7 @@ import '../providers/cart_provider.dart';
 import '../providers/product_provider.dart';
 import '../utils/constants.dart';
 import '../utils/navigation_helper.dart';
+import '../utils/html_helper.dart';
 import '../widgets/product_image_viewer.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -332,7 +333,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      _product!.description,
+                      HtmlHelper.parseHtml(_product!.description),
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[700],

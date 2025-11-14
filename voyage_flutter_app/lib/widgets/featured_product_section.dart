@@ -6,6 +6,7 @@ import '../models/product.dart';
 import '../providers/cart_provider.dart';
 import '../utils/constants.dart';
 import '../utils/navigation_helper.dart';
+import '../utils/html_helper.dart';
 import 'product_image_viewer.dart';
 
 class FeaturedProductSection extends StatefulWidget {
@@ -406,7 +407,7 @@ class _FeaturedProductSectionState extends State<FeaturedProductSection> {
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: Text(
-                widget.product.description,
+                HtmlHelper.parseHtml(widget.product.description),
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.grey[700],
