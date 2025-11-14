@@ -188,14 +188,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Hero Carousel (800x1067)
                         SliverToBoxAdapter(
                           child: HeroCarousel(
-                            items: const [
+                            items: [
                               CarouselItem(
                                 imageUrl: 'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
+                                onTap: () => NavigationHelper.navigateToCollection(
+                                  context,
+                                  'all-products',
+                                ),
                               ),
-                              CarouselItem(
+                              const CarouselItem(
                                 imageUrl: 'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
                               ),
-                              CarouselItem(
+                              const CarouselItem(
                                 imageUrl: 'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
                               ),
                             ],
