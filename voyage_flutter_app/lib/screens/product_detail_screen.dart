@@ -423,6 +423,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       title: ShopReelsConfig.title,
                       subtitle: ShopReelsConfig.subtitle,
                     ),
+
+                  const SizedBox(height: 16),
+                  const ReelsPromoBanner(),
                 ],
               ),
             ),
@@ -795,6 +798,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ReelsPromoBanner extends StatelessWidget {
+  const ReelsPromoBanner({super.key});
+
+  static const _imageUrl =
+      'https://www.voyageeyewear.com/cdn/shop/files/NEW_banner_grab150_mob_copy.jpg?v=1742842579&width=800';
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 375 / 503,
+      child: CachedNetworkImage(
+        imageUrl: _imageUrl,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        placeholder: (context, url) => Container(
+          color: Colors.grey[200],
+          child: const Center(
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+        errorWidget: (context, url, error) => Container(
+          color: Colors.grey[200],
+          child: const Icon(Icons.error_outline, size: 40, color: Colors.grey),
+        ),
+      ),
     );
   }
 }
