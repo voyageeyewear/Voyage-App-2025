@@ -12,7 +12,9 @@ import '../widgets/product_image_viewer.dart';
 import '../widgets/announcement_bar.dart';
 import '../widgets/navigation_drawer.dart';
 import '../widgets/search_drawer.dart';
+import '../widgets/shop_reels_section.dart';
 import '../config/announcement_config.dart';
+import '../config/shop_reels_config.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String productId;
@@ -414,6 +416,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ],
                     ),
                   ),
+
+                  // Shop Our Reels Section
+                  if (ShopReelsConfig.enabled)
+                    const ShopReelsSection(
+                      videoUrls: ShopReelsConfig.videoUrls,
+                      title: ShopReelsConfig.title,
+                      subtitle: ShopReelsConfig.subtitle,
+                    ),
                 ],
               ),
             ),
