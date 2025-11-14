@@ -101,35 +101,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 leadingWidth: 100,
-                title: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'voyage',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    const Text(
-                      '|',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'वॉयेज',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
+                title: Image.network(
+                  'https://www.voyageeyewear.com/cdn/shop/files/Voyage_hindi_2.png?v=1720597430&width=350',
+                  height: 32,
+                  fit: BoxFit.contain,
                 ),
                 centerTitle: true,
                 actions: [
