@@ -13,6 +13,7 @@ import '../widgets/announcement_bar.dart';
 import '../widgets/navigation_drawer.dart';
 import '../widgets/search_drawer.dart';
 import '../widgets/shop_reels_section.dart';
+import '../widgets/footer_section.dart';
 import '../config/announcement_config.dart';
 import '../config/shop_reels_config.dart';
 
@@ -366,8 +367,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                         const SizedBox(height: 16),
 
-                        const Divider(height: 32, thickness: 1),
-
                         // Collapsible Description
                         _buildCollapsibleSection(
                           title: 'Description',
@@ -433,6 +432,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   YouMayAlsoLikeSection(
                     products: productProvider.products,
                   ),
+
+                  const SizedBox(height: 32),
+                  FooterSection(),
                 ],
               ),
             ),
@@ -858,6 +860,7 @@ class YouMayAlsoLikeSection extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
+              color: Colors.black,
             ),
           ),
           const SizedBox(height: 16),
@@ -903,6 +906,7 @@ class YouMayAlsoLikeSection extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -911,6 +915,7 @@ class YouMayAlsoLikeSection extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                   ],
@@ -919,15 +924,17 @@ class YouMayAlsoLikeSection extends StatelessWidget {
             },
           ),
           const SizedBox(height: 12),
-          GestureDetector(
-            onTap: () {},
-            child: const Text(
-              'Show more',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                decoration: TextDecoration.underline,
+          Center(
+            child: TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black,
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
+              child: const Text('Show more'),
             ),
           ),
         ],
