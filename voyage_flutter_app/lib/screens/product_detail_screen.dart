@@ -126,6 +126,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = context.watch<ProductProvider>();
+
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(
@@ -426,6 +428,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                   const SizedBox(height: 16),
                   const ReelsPromoBanner(),
+
+                  const SizedBox(height: 24),
+                  YouMayAlsoLikeSection(
+                    products: productProvider.products,
+                  ),
                 ],
               ),
             ),
@@ -826,6 +833,104 @@ class ReelsPromoBanner extends StatelessWidget {
           color: Colors.grey[200],
           child: const Icon(Icons.error_outline, size: 40, color: Colors.grey),
         ),
+      ),
+    );
+  }
+}
+
+class YouMayAlsoLikeSection extends StatelessWidget {
+  final List<Product> products;
+
+  const YouMayAlsoLikeSection({super.key, required this.products});
+
+  @override
+  Widget build(BuildContext context) {
+    final items = products.take(4).toList();
+    if (items.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'You May Also Like',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 16),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 12,
+              childAspectRatio: 0.7,
+            ),
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final product = items[index];
+              final imageUrl = product.images.isNotEmpty
+                  ? product.images.first
+                  : 'https://via.placeholder.com/300';
+
+              return GestureDetector(
+                onTap: () => NavigationHelper.navigateToProduct(
+                  context,
+                  product.id,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      product.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      AppConstants.formatPrice(product.minPrice),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+          GestureDetector(
+            onTap: () {},
+            child: const Text(
+              'Show more',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
