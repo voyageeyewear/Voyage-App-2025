@@ -458,7 +458,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Text(
                                 'Rs. ${_currentPrice.toStringAsFixed(2)}',
                                 style: const TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
@@ -467,17 +467,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 Text(
                                   'Rs. ${_compareAtPrice!.toStringAsFixed(2)}',
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w400,
                                     color: Colors.grey[500],
                                     decoration: TextDecoration.lineThrough,
                                   ),
                                 ),
-                              const SizedBox(height: 2),
+                              const SizedBox(height: 1),
                               Text(
                                 'Inclusive of all taxes',
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: 10,
                                   color: Colors.grey[600],
                                 ),
                               ),
