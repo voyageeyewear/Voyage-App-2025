@@ -83,22 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
               
               // App Header below announcement
               AppBar(
-                leading: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.menu, size: 24, color: Colors.black),
-                      onPressed: () {
-                        NavigationDrawerWidget.show(context);
-                      },
-                      padding: EdgeInsets.zero,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.search, size: 24, color: Colors.black),
-                      onPressed: () => SearchDrawerWidget.show(context),
-                      padding: EdgeInsets.zero,
-                    ),
-                  ],
+                leading: IconButton(
+                  icon: const Icon(Icons.menu, size: 24, color: Colors.black),
+                  onPressed: () {
+                    NavigationDrawerWidget.show(context);
+                  },
+                  padding: EdgeInsets.zero,
                 ),
                 leadingWidth: 100,
                 title: Image.network(
@@ -108,6 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 centerTitle: true,
                 actions: [
+                  IconButton(
+                    icon: const Icon(Icons.search, size: 24, color: Colors.black),
+                    onPressed: () => SearchDrawerWidget.show(context),
+                    padding: EdgeInsets.zero,
+                  ),
                   Consumer<CartProvider>(
                     builder: (context, cart, child) {
                       return Stack(
