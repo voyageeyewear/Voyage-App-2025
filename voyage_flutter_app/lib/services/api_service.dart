@@ -21,24 +21,39 @@ class ApiService {
   static const String baseUrl = AppConstants.apiBaseUrl;
   final http.Client _client = http.Client();
 
-  Future<dynamic> get(String endpoint) async {
-    try {
-      final url = Uri.parse('$baseUrl$endpoint');
-      print('GET Request: $url');
+  Future<dynamic> get(String endpoint, {int retries = 3}) async {
+    int attemptCount = 0;
+    
+    while (attemptCount < retries) {
+      try {
+        final url = Uri.parse('$baseUrl$endpoint');
+        print('GET Request (Attempt ${attemptCount + 1}/$retries): $url');
 
-      final response = await _client
-          .get(
-            url,
-            headers: {'Content-Type': 'application/json'},
-          )
-          .timeout(AppConstants.requestTimeout);
+        final response = await _client
+            .get(
+              url,
+              headers: {'Content-Type': 'application/json'},
+            )
+            .timeout(AppConstants.requestTimeout);
 
-      return _handleResponse(response);
-    } on TimeoutException {
-      throw ApiException('Request timeout. Please check your connection.');
-    } catch (e) {
-      throw ApiException('Network error: $e');
+        return _handleResponse(response);
+      } on TimeoutException {
+        attemptCount++;
+        if (attemptCount >= retries) {
+          throw ApiException('Request timeout. Please check your connection and make sure backend is running at $baseUrl');
+        }
+        // Exponential backoff: wait 1s, 2s, 4s between retries
+        await Future.delayed(Duration(seconds: 1 * attemptCount));
+      } catch (e) {
+        attemptCount++;
+        if (attemptCount >= retries) {
+          throw ApiException('Network error: Unable to connect to $baseUrl. Please check:\n1. Backend is running (npm start)\n2. Your phone and computer are on the same WiFi\n3. IP address is correct: $baseUrl');
+        }
+        await Future.delayed(Duration(seconds: 1 * attemptCount));
+      }
     }
+    
+    throw ApiException('Failed after $retries attempts');
   }
 
   Future<dynamic> post(String endpoint, Map<String, dynamic> body) async {

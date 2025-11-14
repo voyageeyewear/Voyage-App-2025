@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppConstants {
   // API Configuration
-  static const String apiBaseUrl = 'http://192.168.1.102:3000';  // Your computer's IP address
-  static const String storeDomain = 'tageye.myshopify.com';
+  static const String apiBaseUrl = 'https://voyage-app-2025.vercel.app';  // Vercel deployment (works everywhere!)
+  static const String storeDomain = 'voyage-eyewear.myshopify.com';
   
   // App Information
   static const String appName = 'Voyage Eyewear';
@@ -18,7 +18,7 @@ class AppConstants {
   static const Color textSecondaryColor = Color(0xFF7F8C8D);
   
   // Timeouts
-  static const Duration requestTimeout = Duration(seconds: 30);
+  static const Duration requestTimeout = Duration(seconds: 15);  // Reduced for faster error detection
   static const Duration cacheTimeout = Duration(hours: 1);
   
   // Pagination

@@ -11,10 +11,21 @@ import '../widgets/quick_picks_section.dart';
 import '../widgets/celebrity_spotted_section.dart';
 import '../widgets/fade_carousel.dart';
 import '../widgets/new_launched_section.dart';
+import '../widgets/as_featured_section.dart';
+import '../widgets/best_selling_section.dart';
+import '../widgets/before_after_section.dart';
+import '../widgets/featured_product_section.dart';
+import '../widgets/faq_section.dart';
+import '../widgets/features_carousel.dart';
+import '../widgets/footer_section.dart';
 import '../config/announcement_config.dart';
 import '../config/shop_by_shape_config.dart';
 import '../config/celebrity_config.dart';
 import '../config/fade_carousel_config.dart';
+import '../config/featured_config.dart';
+import '../config/before_after_config.dart';
+import '../config/faq_config.dart';
+import '../config/features_config.dart';
 import '../utils/navigation_helper.dart';
 import '../utils/constants.dart';
 
@@ -279,9 +290,74 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
 
-                        // Add spacing at bottom
+                        // As Featured On Section
+                        if (FeaturedConfig.enabled)
+                          SliverToBoxAdapter(
+                            child: AsFeaturedSection(
+                              logos: FeaturedConfig.logos,
+                              title: FeaturedConfig.sectionTitle,
+                            ),
+                          ),
+
+                        // Best Selling Section
+                        SliverToBoxAdapter(
+                          child: BestSellingSection(
+                            products: productProvider.products.skip(4).take(6).toList(),
+                            title: 'Best Selling',
+                            onViewAll: () {
+                              // Navigate to all products
+                            },
+                          ),
+                        ),
+
+                        // Before/After Section
+                        if (BeforeAfterConfig.enabled)
+                          const SliverToBoxAdapter(
+                            child: BeforeAfterSection(
+                              title: BeforeAfterConfig.title,
+                              subtitle: BeforeAfterConfig.subtitle,
+                              description: BeforeAfterConfig.description,
+                              beforeImage: BeforeAfterConfig.beforeImage,
+                              afterImage: BeforeAfterConfig.afterImage,
+                              beforeText: BeforeAfterConfig.beforeText,
+                              afterText: BeforeAfterConfig.afterText,
+                              initialDragPosition: BeforeAfterConfig.initialDragPosition,
+                            ),
+                          ),
+
+                        // Featured Product Section
+                        if (productProvider.products.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: FeaturedProductSection(
+                              product: productProvider.products.firstWhere(
+                                (p) => p.title.toLowerCase().contains('aurix'),
+                                orElse: () => productProvider.products.first,
+                              ),
+                            ),
+                          ),
+
+                        // FAQ Section
+                        if (FaqConfig.enabled)
+                          const SliverToBoxAdapter(
+                            child: FaqSection(
+                              faqs: FaqConfig.faqs,
+                              introText: FaqConfig.introText,
+                              footerText: FaqConfig.footerText,
+                            ),
+                          ),
+
+                        // Features Carousel Section
+                        if (FeaturesConfig.enabled)
+                          const SliverToBoxAdapter(
+                            child: FeaturesCarousel(
+                              features: FeaturesConfig.features,
+                              autoPlayDuration: FeaturesConfig.autoPlayDuration,
+                            ),
+                          ),
+
+                        // Footer Section
                         const SliverToBoxAdapter(
-                          child: SizedBox(height: 32),
+                          child: FooterSection(),
                         ),
               ],
             ),
