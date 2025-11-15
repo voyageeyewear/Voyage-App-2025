@@ -1,0 +1,99 @@
+[
+  {
+    "id": "1",
+    "title": "Classic Aviator Sunglasses",
+    "handle": "classic-aviator",
+    "description": "Timeless aviator style sunglasses with UV protection. Perfect for any occasion.",
+    "images": [
+      {"url": "https://cdn.shopify.com/s/files/1/0070/7032/files/image5_4.jpg?v=1620913665"}
+    ],
+    "priceRange": {
+      "minVariantPrice": {"amount": "2499"},
+      "maxVariantPrice": {"amount": "2499"}
+    },
+    "variants": [{
+      "id": "1",
+      "title": "Default",
+      "price": {"amount": "2499"},
+      "availableForSale": true,
+      "quantityAvailable": 10,
+      "selectedOptions": {}
+    }],
+    "availableForSale": true,
+    "tags": ["sunglasses", "aviator"],
+    "vendor": "Voyage Eyewear"
+  },
+  {
+    "id": "2",
+    "title": "Blue Light Blocking Glasses",
+    "handle": "blue-light-blocking",
+    "description": "Protect your eyes from harmful blue light with these stylish computer glasses.",
+    "images": [
+      {"url": "https://cdn.shopify.com/s/files/1/0070/7032/files/image5_4.jpg?v=1620913665"}
+    ],
+    "priceRange": {
+      "minVariantPrice": {"amount": "1999"},
+      "maxVariantPrice": {"amount": "1999"}
+    },
+    "variants": [{
+      "id": "2",
+      "title": "Default",
+      "price": {"amount": "1999"},
+      "availableForSale": true,
+      "quantityAvailable": 15,
+      "selectedOptions": {}
+    }],
+    "availableForSale": true,
+    "tags": ["blue-light", "computer-glasses"],
+    "vendor": "Voyage Eyewear"
+  },
+  {
+    "id": "3",
+    "title": "Wayfarer Style Frames",
+    "handle": "wayfarer-frames",
+    "description": "Classic wayfarer design with modern comfort. Available with prescription lenses.",
+    "images": [
+      {"url": "https://cdn.shopify.com/s/files/1/0070/7032/files/image5_4.jpg?v=1620913665"}
+    ],
+    "priceRange": {
+      "minVariantPrice": {"amount": "2999"},
+      "maxVariantPrice": {"amount": "2999"}
+    },
+    "variants": [{
+      "id": "3",
+      "title": "Default",
+      "price": {"amount": "2999"},
+      "availableForSale": true,
+      "quantityAvailable": 20,
+      "selectedOptions": {}
+    }],
+    "availableForSale": true,
+    "tags": ["frames", "wayfarer"],
+    "vendor": "Voyage Eyewear"
+  },
+  {
+    "id": "4",
+    "title": "Round Metal Frames",
+    "handle": "round-metal-frames",
+    "description": "Elegant round metal frames perfect for a sophisticated look.",
+    "images": [
+      {"url": "https://cdn.shopify.com/s/files/1/0070/7032/files/image5_4.jpg?v=1620913665"}
+    ],
+    "priceRange": {
+      "minVariantPrice": {"amount": "3499"},
+      "maxVariantPrice": {"amount": "3499"}
+    },
+    "variants": [{
+      "id": "4",
+      "title": "Default",
+      "price": {"amount": "3499"},
+      "availableForSale": true,
+      "quantityAvailable": 8,
+      "selectedOptions": {}
+    }],
+    "availableForSale": true,
+    "tags": ["frames", "round", "metal"],
+    "vendor": "Voyage Eyewear"
+  }
+]
+

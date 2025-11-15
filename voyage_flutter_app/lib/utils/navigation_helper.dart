@@ -11,10 +11,10 @@ class NavigationHelper {
   }
 
   static void navigateToCollection(BuildContext context, String collectionHandle) {
-    // Collection page temporarily disabled
-    showSnackBar(
+    Navigator.pushNamed(
       context,
-      'Collections page coming soon!',
+      '/collection',
+      arguments: {'handle': collectionHandle},
     );
   }
 

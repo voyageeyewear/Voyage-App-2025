@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../models/product.dart';
@@ -42,10 +44,29 @@ class _CollectionScreenState extends State<CollectionScreen> {
   }
 
   Future<void> _loadProducts() async {
+    setState(() => _initializing = true);
     try {
-      final products = await context
-          .read<ProductProvider>()
-          .fetchCollectionProducts(widget.collectionHandle);
+      final productProvider = context.read<ProductProvider>();
+      List<Product> products;
+
+      final normalizedHandle = widget.collectionHandle.trim();
+      final isAllProducts =
+          normalizedHandle.isEmpty || normalizedHandle == 'all-products';
+
+      if (isAllProducts) {
+        await productProvider.fetchProducts(limit: 120);
+        products = productProvider.products;
+      } else {
+        products = await productProvider.fetchCollectionProducts(normalizedHandle);
+        if (products.isEmpty) {
+          await productProvider.fetchProducts(limit: 120);
+          products = productProvider.products;
+        }
+      }
+
+      if (products.isEmpty) {
+        products = await _loadDemoProducts();
+      }
 
       final minPrice = products.isNotEmpty
           ? products.map((p) => p.minPrice).reduce(min)
@@ -64,13 +85,43 @@ class _CollectionScreenState extends State<CollectionScreen> {
 
       _applyFilters();
     } catch (e) {
+      final fallback = await _loadDemoProducts();
+      if (mounted && fallback.isNotEmpty) {
+        setState(() {
+          _allProducts = fallback;
+          _priceBounds = RangeValues(
+            fallback.map((p) => p.minPrice).reduce(min).floorToDouble(),
+            fallback.map((p) => p.minPrice).reduce(max).ceilToDouble(),
+          );
+          _selectedPriceRange = _priceBounds;
+          _initializing = false;
+        });
+        _applyFilters();
+        return;
+      }
       if (mounted) {
         NavigationHelper.showSnackBar(
           context,
           'Failed to load products: $e',
           isError: true,
         );
+        setState(() {
+          _initializing = false;
+        });
       }
+    }
+  }
+
+  Future<List<Product>> _loadDemoProducts() async {
+    try {
+      final jsonStr =
+          await rootBundle.loadString('assets/data/demo_products.json');
+      final List<dynamic> data = jsonDecode(jsonStr);
+      return data
+          .map((item) => Product.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } catch (_) {
+      return [];
     }
   }
 
@@ -227,25 +278,28 @@ class _CollectionScreenState extends State<CollectionScreen> {
                   slivers: [
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                        padding: const EdgeInsets.fromLTRB(16, 28, 16, 4),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               '${_filteredProducts.length} products',
                               style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             Text(
                               widget.collectionHandle
                                   .replaceAll('-', ' ')
                                   .toUpperCase(),
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
                                 color: Colors.grey[600],
+                                letterSpacing: 1,
                               ),
                             ),
                           ],
@@ -265,9 +319,9 @@ class _CollectionScreenState extends State<CollectionScreen> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          mainAxisSpacing: 20,
+                          mainAxisSpacing: 24,
                           crossAxisSpacing: 16,
-                          childAspectRatio: 0.62,
+                          childAspectRatio: 0.66,
                         ),
                       ),
                     ),
@@ -349,97 +403,192 @@ class CollectionProductCard extends StatelessWidget {
     final savings = (compare != null && compare > product.minPrice)
         ? compare - product.minPrice
         : null;
+    final monthlyPrice = (product.minPrice / 3).ceil();
 
     return GestureDetector(
       onTap: () => NavigationHelper.navigateToProduct(context, product.id),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.network(
-                    product.images.isNotEmpty
-                        ? product.images.first
-                        : 'https://via.placeholder.com/400',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                ),
-                if (savings != null)
-                  Positioned(
-                    top: 10,
-                    left: 10,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1f5ad7),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        'Save Rs. ${savings.toStringAsFixed(0)}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(22),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 18,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(18),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Image.network(
+                        product.images.isNotEmpty
+                            ? product.images.first
+                            : 'https://via.placeholder.com/400',
+                        fit: BoxFit.cover,
+                        width: double.infinity,
                       ),
                     ),
                   ),
-                Positioned(
-                  bottom: 12,
-                  right: 12,
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
+                  if (savings != null)
+                    Positioned(
+                      top: 12,
+                      left: 12,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF0A46E8),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          'Save Rs. ${savings.toStringAsFixed(0)}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: const [
+                        _IconLabelBadge(
+                          icon: Icons.visibility_outlined,
+                          label: '100% POLARIZED',
+                        ),
+                        SizedBox(height: 6),
+                        _IconLabelBadge(
+                          icon: Icons.wb_sunny_outlined,
+                          label: 'UV PROTECTED',
                         ),
                       ],
                     ),
-                    child: const Icon(Icons.shopping_bag_outlined),
+                  ),
+                  Positioned(
+                    bottom: 12,
+                    right: 12,
+                    child: Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.black12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.12),
+                            blurRadius: 10,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(Icons.shopping_bag_outlined),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              product.title,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                height: 1.3,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Rs. ${product.minPrice.toStringAsFixed(2)}',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            if (compare != null && compare > product.minPrice)
+              Text(
+                'Rs. ${compare.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                Text(
+                  'or Rs. $monthlyPrice/Month',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const Icon(Icons.eco, size: 18, color: Color(0xFF3CB466)),
+                const SizedBox(width: 4),
+                const Text(
+                  'Buy on EMI >',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF5F2BFF),
                   ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _IconLabelBadge extends StatelessWidget {
+  final String label;
+  final IconData icon;
+
+  const _IconLabelBadge({required this.label, required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.55),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: Colors.white, size: 12),
+          const SizedBox(width: 4),
           Text(
-            product.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+            label,
             style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Rs. ${product.minPrice.toStringAsFixed(2)}',
-            style: const TextStyle(
-              fontSize: 15,
+              color: Colors.white,
+              fontSize: 9,
               fontWeight: FontWeight.w700,
             ),
           ),
-          if (compare != null && compare > product.minPrice)
-            Text(
-              'Rs. ${compare.toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 13,
-                color: Colors.grey,
-                decoration: TextDecoration.lineThrough,
-              ),
-            ),
         ],
       ),
     );

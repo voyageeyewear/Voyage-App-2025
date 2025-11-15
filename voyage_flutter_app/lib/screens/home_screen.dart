@@ -190,17 +190,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: HeroCarousel(
                             items: [
                               CarouselItem(
-                                imageUrl: 'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
+                                imageUrl:
+                                    'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
                                 onTap: () => NavigationHelper.navigateToCollection(
                                   context,
                                   'all-products',
                                 ),
                               ),
-                              const CarouselItem(
-                                imageUrl: 'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
+                              CarouselItem(
+                                imageUrl:
+                                    'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
+                                onTap: () => NavigationHelper.navigateToCollection(
+                                  context,
+                                  'all-products',
+                                ),
                               ),
-                              const CarouselItem(
-                                imageUrl: 'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
+                              CarouselItem(
+                                imageUrl:
+                                    'https://www.voyageeyewear.com/cdn/shop/files/phone_size.jpg?v=1757661560&width=800',
+                                onTap: () => NavigationHelper.navigateToCollection(
+                                  context,
+                                  'all-products',
+                                ),
                               ),
                             ],
                           ),

@@ -41,4 +41,5 @@ flutter:
   
   assets:
     - assets/images/
+    - assets/data/demo_products.json
 
