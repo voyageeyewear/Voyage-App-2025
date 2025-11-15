@@ -888,6 +888,18 @@ class YouMayAlsoLikeSection extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
+                    if (product.compareAtPrice != null &&
+                        double.tryParse(product.compareAtPrice!) != null &&
+                        double.parse(product.compareAtPrice!) > product.minPrice)
+                      Text(
+                        AppConstants.formatPrice(
+                            double.parse(product.compareAtPrice!)),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
                   ],
                 ),
               );
