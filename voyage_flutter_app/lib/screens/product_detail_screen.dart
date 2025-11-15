@@ -880,26 +880,33 @@ class YouMayAlsoLikeSection extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      AppConstants.formatPrice(product.minPrice),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    if (product.compareAtPrice != null &&
-                        double.tryParse(product.compareAtPrice!) != null &&
-                        double.parse(product.compareAtPrice!) > product.minPrice)
-                      Text(
-                        AppConstants.formatPrice(
-                            double.parse(product.compareAtPrice!)),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                          decoration: TextDecoration.lineThrough,
+                    Row(
+                      children: [
+                        Text(
+                          AppConstants.formatPrice(product.minPrice),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
+                        if (product.compareAtPrice != null &&
+                            double.tryParse(product.compareAtPrice!) != null &&
+                            double.parse(product.compareAtPrice!) >
+                                product.minPrice) ...[
+                          const SizedBox(width: 6),
+                          Text(
+                            AppConstants.formatPrice(
+                                double.parse(product.compareAtPrice!)),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                   ],
                 ),
               );
